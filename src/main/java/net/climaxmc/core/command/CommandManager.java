@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
+import java.util.Arrays;
 import java.util.Set;
 
 public class CommandManager implements Listener {
@@ -23,12 +24,12 @@ public class CommandManager implements Listener {
     }
 
     /**
-     * Adds a command to the set of commands
+     * Adds commands to the set of commands
      *
-     * @param command Command to add
+     * @param commands Commands to add
      */
-    public void addCommand(Command command) {
-        commands.add(command);
+    public void addCommands(Command... commands) {
+        this.commands.addAll(Arrays.asList(commands));
     }
 
     private void initializeCommands() {

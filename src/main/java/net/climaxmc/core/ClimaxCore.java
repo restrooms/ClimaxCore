@@ -35,7 +35,7 @@ public class ClimaxCore {
         plugin = pluginInstance;
         mySQL = new MySQL(plugin, "localhost", 3306, "climax", "plugin", "rR6nCbqaFTPCZqHA");
         commandManager = new CommandManager();
-
+        plugin.getServer().getPluginManager().registerEvents(new CoreListeners(), plugin);
         mySQL.createServer(gameType);
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             serverID = mySQL.getServerID();

@@ -1,4 +1,4 @@
-package net.climaxmc.core.command.commands.punishments;
+package net.climaxmc.core.utilities;
 
 import lombok.*;
 

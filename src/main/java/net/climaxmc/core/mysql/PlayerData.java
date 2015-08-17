@@ -3,7 +3,6 @@ package net.climaxmc.core.mysql;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import net.climaxmc.core.events.PlayerBalanceChangeEvent;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 
 import java.util.*;
@@ -127,40 +126,5 @@ public class PlayerData {
     public void removePunishment(Punishment punishment) {
         punishments.remove(punishment);
         mySQL.executeUpdate(DataQueries.UPDATE_PUNISHMENT_TIME, 0, id, punishment.getType().name(), punishment.getTime());
-    }
-
-    /**
-     * Checks if the player has the specified kit
-     *
-     * @param gameType Game type of kit
-     * @param kit Kit to check
-     */
-    public boolean hasKit(GameType gameType, Kit kit) {
-        boolean has = false;
-        if (kits.containsKey(gameType)) {
-            for (String kitName : kits.get(gameType)) {
-                if (ChatColor.stripColor(kitName).equals(kit.getName())) {
-                    has = true;
-                }
-            }
-        }
-        return kit.getCost() == 0 || has;
-    }
-
-    /**
-     * Purchases a kit
-     *
-     * @param kit Kit to purchase
-     */
-    public void purchaseKit(GameType gameType, Kit kit) {
-        withdrawCoins(kit.getCost());
-        if (kits == null) {
-            kits = new HashMap<>();
-        }
-        if (!kits.containsKey(gameType)) {
-            kits.put(gameType, new HashSet<>());
-        }
-        kits.get(gameType).add(ChatColor.stripColor(kit.getName()));
-        mySQL.executeUpdate(DataQueries.PURCHASE_KIT, id, gameType.getId(), ChatColor.stripColor(kit.getName()));
     }
 }
