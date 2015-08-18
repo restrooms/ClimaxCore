@@ -24,9 +24,19 @@ public enum GameType {
         return null;
     }
 
+    public static GameType fromName(String name) {
+        for (GameType type : values()) {
+            if (type.getName().equalsIgnoreCase(name)) {
+                return type;
+            }
+        }
+
+        return null;
+    }
+
     public static GameType fromAbbreviation(String abbreviation) {
         for (GameType type : values()) {
-            if (type.getAbbreviation().equals(abbreviation)) {
+            if (type.getAbbreviation().equalsIgnoreCase(abbreviation)) {
                 return type;
             }
         }
