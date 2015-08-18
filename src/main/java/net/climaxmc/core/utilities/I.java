@@ -2,6 +2,7 @@ package net.climaxmc.core.utilities;
 
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -119,7 +120,11 @@ public class I extends ItemStack {
      * @since 1.0
      */
     public I enchantment(final Enchantment enchantment, final int level) {
-        addUnsafeEnchantment(enchantment, level);
+        if (enchantment != null) {
+            addUnsafeEnchantment(enchantment, level);
+        } else {
+            getItemMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        }
         return this;
     }
 
@@ -131,7 +136,11 @@ public class I extends ItemStack {
      * @since 1.0
      */
     public I enchantment(final Enchantment enchantment) {
-        addUnsafeEnchantment(enchantment, 1);
+        if (enchantment != null) {
+            addUnsafeEnchantment(enchantment, 1);
+        } else {
+            getItemMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        }
         return this;
     }
 

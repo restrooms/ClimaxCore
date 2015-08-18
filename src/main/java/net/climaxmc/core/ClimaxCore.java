@@ -36,9 +36,15 @@ public class ClimaxCore {
         mySQL = new MySQL(plugin, "localhost", 3306, "climax", "plugin", "rR6nCbqaFTPCZqHA");
         commandManager = new CommandManager();
         plugin.getServer().getPluginManager().registerEvents(new CoreListeners(), plugin);
-        mySQL.createServer(gameType);
+        if (!gameType.equals(GameType.HUB)) {
+            mySQL.createServer(gameType);
+        }
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            serverID = mySQL.getServerID();
+            if (gameType.equals(GameType.HUB)) {
+                serverID = 0;
+            } else {
+                serverID = mySQL.getServerID();
+            }
             UtilPlayer.getAll().forEach(player -> getPlayerData(player).setServerID(serverID));
         }, 2);
     }
@@ -50,7 +56,9 @@ public class ClimaxCore {
      */
     public static void onDisable() {
         UtilPlayer.getAll().forEach(player -> getPlayerData(player).setServerID(null));
-        mySQL.deleteServer();
+        if (serverID != 0) {
+            mySQL.deleteServer();
+        }
         mySQL.closeConnection();
     }
 
