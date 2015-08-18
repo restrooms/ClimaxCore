@@ -124,6 +124,7 @@ public class I extends ItemStack {
             addUnsafeEnchantment(enchantment, level);
         } else {
             getItemMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            addUnsafeEnchantment(Enchantment.DURABILITY, level);
         }
         return this;
     }
@@ -140,6 +141,7 @@ public class I extends ItemStack {
             addUnsafeEnchantment(enchantment, 1);
         } else {
             getItemMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            addUnsafeEnchantment(Enchantment.DURABILITY, 1);
         }
         return this;
     }
