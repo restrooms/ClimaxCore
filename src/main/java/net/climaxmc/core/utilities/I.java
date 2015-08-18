@@ -123,7 +123,9 @@ public class I extends ItemStack {
         if (enchantment != null) {
             addUnsafeEnchantment(enchantment, level);
         } else {
-            getItemMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            final ItemMeta meta = getItemMeta();
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            setItemMeta(meta);
             addUnsafeEnchantment(Enchantment.DURABILITY, level);
         }
         return this;
@@ -140,7 +142,9 @@ public class I extends ItemStack {
         if (enchantment != null) {
             addUnsafeEnchantment(enchantment, 1);
         } else {
-            getItemMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            final ItemMeta meta = getItemMeta();
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            setItemMeta(meta);
             addUnsafeEnchantment(Enchantment.DURABILITY, 1);
         }
         return this;
