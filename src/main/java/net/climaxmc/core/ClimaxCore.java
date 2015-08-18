@@ -35,7 +35,7 @@ public class ClimaxCore {
         plugin = pluginInstance;
         mySQL = new MySQL(plugin, "localhost", 3306, "climax", "plugin", "rR6nCbqaFTPCZqHA");
         commandManager = new CommandManager();
-        plugin.getServer().getPluginManager().registerEvents(new CoreListeners(), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new CoreListeners(plugin), plugin);
         if (!gameType.equals(GameType.HUB)) {
             mySQL.createServer(gameType);
         }

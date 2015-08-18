@@ -5,22 +5,28 @@ import net.climaxmc.core.utilities.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.player.*;
+import org.bukkit.plugin.Plugin;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
 public class CoreListeners implements Listener {
+    private Plugin plugin;
+
+    public CoreListeners(Plugin plugin) {
+        this.plugin = plugin;
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onAsyncPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
         PlayerData playerData = ClimaxCore.getPlayerData(event.getUniqueId());
 
         if (playerData == null) {
             ClimaxCore.getMySQL().createPlayerData(event.getUniqueId(), event.getName(), event.getAddress().getHostAddress());
-            playerData = ClimaxCore.getPlayerData(event.getUniqueId());
         }
 
-        if (!playerData.getIp().equals(event.getAddress().getHostAddress())) {
+        if (playerData != null && !playerData.getIp().equals(event.getAddress().getHostAddress())) {
             playerData.setIP(event.getAddress().getHostAddress());
         }
 
@@ -35,7 +41,7 @@ public class CoreListeners implements Listener {
         }
         Set<PlayerData> matchingData = new HashSet<>();
         ipMatchingPlayers.stream().filter(uuid -> ClimaxCore.getPlayerData(uuid).getPunishments().stream().anyMatch(punishment -> punishment.getType().equals(Punishment.PunishType.BAN))).forEach(uuid -> matchingData.add(ClimaxCore.getPlayerData(uuid)));
-        if (playerData.getPunishments().stream().anyMatch(punishment -> punishment.getType().equals(Punishment.PunishType.BAN))) {
+        if (playerData != null && playerData.getPunishments().stream().anyMatch(punishment -> punishment.getType().equals(Punishment.PunishType.BAN))) {
             matchingData.add(playerData);
         }
         matchingData.forEach(data -> data.getPunishments().forEach(punishment -> {
@@ -56,7 +62,7 @@ public class CoreListeners implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        ClimaxCore.getPlayerData(player).setServerID(ClimaxCore.getServerID());
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> ClimaxCore.getPlayerData(player).setServerID(ClimaxCore.getServerID()), 2);
         ClimaxCore.getPlayerOnTimes().put(player.getUniqueId(), System.currentTimeMillis());
         ClimaxCore.getMySQL().updateServerPlayers(UtilPlayer.getAll().size(), ClimaxCore.getServerID());
     }
