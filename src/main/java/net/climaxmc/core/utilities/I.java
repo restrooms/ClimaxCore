@@ -120,14 +120,7 @@ public class I extends ItemStack {
      * @since 1.0
      */
     public I enchantment(final Enchantment enchantment, final int level) {
-        if (enchantment != null) {
-            addUnsafeEnchantment(enchantment, level);
-        } else {
-            final ItemMeta meta = getItemMeta();
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-            setItemMeta(meta);
-            addUnsafeEnchantment(Enchantment.DURABILITY, level);
-        }
+        addUnsafeEnchantment(enchantment, level);
         return this;
     }
 
@@ -139,14 +132,7 @@ public class I extends ItemStack {
      * @since 1.0
      */
     public I enchantment(final Enchantment enchantment) {
-        if (enchantment != null) {
-            addUnsafeEnchantment(enchantment, 1);
-        } else {
-            final ItemMeta meta = getItemMeta();
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-            setItemMeta(meta);
-            addUnsafeEnchantment(Enchantment.DURABILITY, 1);
-        }
+        addUnsafeEnchantment(enchantment, 1);
         return this;
     }
 
@@ -203,6 +189,31 @@ public class I extends ItemStack {
         } else {
             throw new IllegalArgumentException("color() only applicable for leather armor!");
         }
+    }
+
+    /**
+     * Adds an {@link ItemFlag} to the {@link ItemStack}
+     *
+     * @param flag the flag to add
+     * @return this builder for chaining
+     */
+    public I flag(ItemFlag flag) {
+        final ItemMeta meta = getItemMeta();
+        meta.addItemFlags(flag);
+        setItemMeta(meta);
+        return this;
+    }
+
+    /**
+     * Clears the list of {@link ItemFlag}s of the {@link ItemStack}
+     *
+     * @return this builder for chaining
+     */
+    public I clearFlags() {
+        final ItemMeta meta = getItemMeta();
+        meta.getItemFlags().forEach(meta::removeItemFlags);
+        setItemMeta(meta);
+        return this;
     }
 }
 
