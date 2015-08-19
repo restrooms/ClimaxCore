@@ -34,6 +34,7 @@ public class ClimaxCore {
     public static void onEnable(Plugin pluginInstance, GameType gameType) {
         plugin = pluginInstance;
         mySQL = new MySQL(plugin, "localhost", 3306, "climax", "plugin", "rR6nCbqaFTPCZqHA");
+        plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
         commandManager = new CommandManager();
         plugin.getServer().getPluginManager().registerEvents(new CoreListeners(plugin), plugin);
         if (!gameType.equals(GameType.HUB)) {

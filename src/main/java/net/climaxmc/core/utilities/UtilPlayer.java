@@ -1,5 +1,7 @@
 package net.climaxmc.core.utilities;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import net.climaxmc.core.ClimaxCore;
 import net.climaxmc.core.mysql.Rank;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
@@ -91,5 +93,18 @@ public class UtilPlayer {
         ChatComponentText chatComponent = new ChatComponentText(message);
         PacketPlayOutChat packet = new PacketPlayOutChat(chatComponent, (byte) 2);
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+    }
+
+    /**
+     * Sends the player to a server
+     *
+     * @param player Player to send
+     * @param serverName Server to send to
+     */
+    public static void sendToServer(Player player, String serverName) {
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF("Connect");
+        out.writeUTF(serverName);
+        player.sendPluginMessage(ClimaxCore.getPlugin(), "BungeeCord", out.toByteArray());
     }
 }

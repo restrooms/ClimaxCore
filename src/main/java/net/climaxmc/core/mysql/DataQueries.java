@@ -18,6 +18,7 @@ public class DataQueries {
             "(SELECT `a`.`globalid` + 1 FROM (SELECT 0 AS `globalid` UNION SELECT `globalid` FROM `servers` ORDER BY `globalid`) AS `a` LEFT JOIN `servers` AS `b` ON `b`.`globalid` = `a`.`globalid` + 1 WHERE `b`.`globalid` IS NULL LIMIT 1), ?, " +
             "(SELECT `a`.`serverid` + 1 FROM (SELECT 0 AS `serverid` UNION SELECT `serverid` FROM `servers` ORDER BY `serverid`) AS `a` LEFT JOIN `servers` AS `b` ON `b`.`serverid` = `a`.`serverid` + 1 WHERE `b`.`serverid` IS NULL LIMIT 1), ?, ?, ?);";
     public static final String GET_SERVER_ID = "SELECT `globalid` FROM `servers` WHERE `ip` = ? AND `port` = ?;";
+    public static final String GET_SERVERS = "SELECT * FROM `servers` `server` LEFT JOIN `games` `game` ON `server`.`gameid` = `game`.`gameid`;";
     public static final String UPDATE_PLAYERS_ONLINE = "UPDATE `servers` SET `players` = ? WHERE `globalid` = ?;";
     public static final String DELETE_SERVER = "DELETE FROM `servers` WHERE `ip` = ? AND `port` = ?;";
 }

@@ -2,6 +2,7 @@ package net.climaxmc.core.command;
 
 import com.google.common.collect.Sets;
 import net.climaxmc.core.ClimaxCore;
+import net.climaxmc.core.command.commands.HubCommand;
 import net.climaxmc.core.command.commands.RankCommand;
 import net.climaxmc.core.command.commands.punishments.*;
 import net.climaxmc.core.mysql.PlayerData;
@@ -35,6 +36,7 @@ public class CommandManager implements Listener {
     private void initializeCommands() {
         commands = Sets.newHashSet(
                 new RankCommand(),
+                new HubCommand(),
                 new BanCommand(),
                 new TempBanCommand(),
                 new MuteCommand(),

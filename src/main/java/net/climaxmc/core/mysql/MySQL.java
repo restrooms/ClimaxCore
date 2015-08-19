@@ -5,6 +5,7 @@ import net.climaxmc.core.utilities.UtilPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import java.net.InetSocketAddress;
 import java.sql.*;
 import java.util.*;
 
@@ -263,15 +264,15 @@ public class MySQL {
      * @return Data of player
      */
     public PlayerData getPlayerData(int id) {
-        ResultSet data = executeQuery(DataQueries.GET_PLAYERDATA_ID, id);
-
-        if (data == null) {
-            return null;
-        }
-
         PlayerData playerData = null;
 
-        try {
+        try (ResultSet data = executeQuery(DataQueries.GET_PLAYERDATA_ID, id);
+             ResultSet punishments = executeQuery(DataQueries.GET_PUNISHMENTS, id);
+             ResultSet purchasedKits = executeQuery(DataQueries.GET_PURCHASED_KITS, id)) {
+            if (data == null) {
+                return null;
+            }
+
             if (data.next()) {
                 UUID uuid = UUID.fromString(data.getString("uuid"));
                 String name = data.getString("name");
@@ -282,7 +283,6 @@ public class MySQL {
                 Integer server = data.getInt("serverid");
                 playerData = new PlayerData(this, id, uuid, name, ip, rank, coins, ontime, server, new ArrayList<>(), new HashMap<>());
 
-                ResultSet punishments = executeQuery(DataQueries.GET_PUNISHMENTS, id);
                 while (punishments != null && punishments.next()) {
                     Punishment.PunishType type = Punishment.PunishType.valueOf(punishments.getString("type"));
                     long time = punishments.getLong("time");
@@ -292,7 +292,6 @@ public class MySQL {
                     playerData.getPunishments().add(new Punishment(id, type, time, expiration, punisherID, reason));
                 }
 
-                ResultSet purchasedKits = executeQuery(DataQueries.GET_PURCHASED_KITS, id);
                 while (purchasedKits != null && purchasedKits.next()) {
                     GameType gameType = GameType.fromID(purchasedKits.getInt("gameid"));
                     String kitName = purchasedKits.getString("kitname");
@@ -345,8 +344,7 @@ public class MySQL {
      * @return ID of server
      */
     public int getServerID() {
-        ResultSet serverIDResult = executeQuery(DataQueries.GET_SERVER_ID, plugin.getServer().getIp(), plugin.getServer().getPort());
-        try {
+        try (ResultSet serverIDResult = executeQuery(DataQueries.GET_SERVER_ID, plugin.getServer().getIp(), plugin.getServer().getPort())) {
             if (serverIDResult != null && serverIDResult.next()) {
                 return serverIDResult.getInt("globalid");
             }
@@ -363,7 +361,47 @@ public class MySQL {
         executeUpdate(DataQueries.DELETE_SERVER, plugin.getServer().getIp(), plugin.getServer().getPort());
     }
 
+    /**
+     * Updates the amount of players online in the database
+     *
+     * @param players Players online
+     * @param serverID ID of server to update
+     */
     public void updateServerPlayers(int players, int serverID) {
         executeUpdate(DataQueries.UPDATE_PLAYERS_ONLINE, players, serverID);
+    }
+
+    /**
+     * Gets a set of servers in the database
+     *
+     * @return Servers in the database
+     */
+    public Set<ServerInfo> getServers() {
+        Set<ServerInfo> servers = new HashSet<>();
+        try (ResultSet resultSet = executeQuery(DataQueries.GET_SERVERS)){
+            while (resultSet != null && resultSet.next()) {
+                if (resultSet.getString("shortname").equalsIgnoreCase("Hub")) {
+                    servers.add(new ServerInfo(
+                            "Hub",
+                            GameType.HUB,
+                            new InetSocketAddress(resultSet.getString("ip"), resultSet.getInt("port")),
+                            resultSet.getInt("players"),
+                            resultSet.getString("state")
+                    ));
+                } else {
+                    servers.add(new ServerInfo(
+                            resultSet.getString("shortname") + "-" + resultSet.getInt("serverid"),
+                            GameType.fromAbbreviation(resultSet.getString("shortname")),
+                            new InetSocketAddress(resultSet.getString("ip"), resultSet.getInt("port")),
+                            resultSet.getInt("players"),
+                            resultSet.getString("state")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            plugin.getLogger().severe("Could not get list of servers from MySQL! " + e.getMessage());
+            e.printStackTrace();
+        }
+        return servers;
     }
 }
