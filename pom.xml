@@ -21,6 +21,7 @@
             <artifactId>lombok</artifactId>
             <version>1.14.8</version>
         </dependency>
+
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
@@ -33,6 +34,7 @@
             <id>climax-repo</id>
             <url>https://admin.climaxmc.net/nexus/content/repositories/releases/</url>
         </repository>
+
         <snapshotRepository>
             <id>climax-repo</id>
             <url>https://admin.climaxmc.net/nexus/content/repositories/snapshots/</url>
@@ -47,13 +49,11 @@
                 <version>3.3</version>
 
                 <configuration>
-                    <excludes>
-                        <exclude>WorldConfigGenerator</exclude>
-                    </excludes>
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
