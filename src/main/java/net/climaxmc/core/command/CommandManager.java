@@ -2,8 +2,9 @@ package net.climaxmc.core.command;
 
 import com.google.common.collect.Sets;
 import net.climaxmc.core.ClimaxCore;
-import net.climaxmc.core.command.commands.HubCommand;
-import net.climaxmc.core.command.commands.RankCommand;
+import net.climaxmc.core.command.commands.*;
+import net.climaxmc.core.command.commands.messaging.MessageCommand;
+import net.climaxmc.core.command.commands.messaging.ReplyCommand;
 import net.climaxmc.core.command.commands.punishments.*;
 import net.climaxmc.core.mysql.PlayerData;
 import net.climaxmc.core.utilities.F;
@@ -37,6 +38,7 @@ public class CommandManager implements Listener {
         commands = Sets.newHashSet(
                 new RankCommand(),
                 new HubCommand(),
+                new MeCommand(),
                 new BanCommand(),
                 new TempBanCommand(),
                 new MuteCommand(),
@@ -44,7 +46,9 @@ public class CommandManager implements Listener {
                 new KickCommand(),
                 new WarnCommand(),
                 new UnBanCommand(),
-                new UnMuteCommand()
+                new UnMuteCommand(),
+                new MessageCommand(),
+                new ReplyCommand()
         );
     }
 
