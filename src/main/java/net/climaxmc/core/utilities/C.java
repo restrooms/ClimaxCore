@@ -53,7 +53,7 @@ public class C {
 
     public static Color getColorFromCode(String colorCode) {
         if (colorCode.contains("1")) {
-            return Color.BLUE;
+            return Color.AQUA;
         }
         if (colorCode.contains("2")) {
             return Color.GREEN;
@@ -77,7 +77,7 @@ public class C {
             return Color.GRAY;
         }
         if (colorCode.contains("9")) {
-            return Color.BLUE;
+            return Color.AQUA;
         }
         if (colorCode.contains("a")) {
             return Color.GREEN;
