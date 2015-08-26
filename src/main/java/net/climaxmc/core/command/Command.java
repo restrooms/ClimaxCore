@@ -1,6 +1,7 @@
 package net.climaxmc.core.command;
 
 import net.climaxmc.core.mysql.Rank;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 
 /**
@@ -9,7 +10,7 @@ import org.bukkit.entity.Player;
 public abstract class Command {
     protected String[] names;
     protected Rank rank;
-    protected String usage;
+    protected TextComponent usage;
 
     /**
      * Defines a command
@@ -17,7 +18,7 @@ public abstract class Command {
      * @param names Names of command (includes aliases)
      * @param rank  Rank of command
      */
-    public Command(String[] names, Rank rank, String usage) {
+    public Command(String[] names, Rank rank, TextComponent usage) {
         this.names = names;
         this.rank = rank;
         this.usage = usage;
@@ -30,7 +31,7 @@ public abstract class Command {
      * @param args   Arguments of command
      * @return Result of execution
      */
-    public abstract String execute(Player player, String[] args);
+    public abstract TextComponent execute(Player player, String[] args);
 
     /**
      * Get the command names
@@ -55,7 +56,7 @@ public abstract class Command {
      *
      * @return Command usage
      */
-    public String getUsage() {
+    public TextComponent getUsage() {
         return usage;
     }
 }

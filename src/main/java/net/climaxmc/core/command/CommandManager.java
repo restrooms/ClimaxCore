@@ -8,6 +8,7 @@ import net.climaxmc.core.command.commands.messaging.ReplyCommand;
 import net.climaxmc.core.command.commands.punishments.*;
 import net.climaxmc.core.mysql.PlayerData;
 import net.climaxmc.core.utilities.F;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,6 +40,7 @@ public class CommandManager implements Listener {
                 new RankCommand(),
                 new HubCommand(),
                 new MeCommand(),
+                new FriendsCommand(),
                 new BanCommand(),
                 new TempBanCommand(),
                 new MuteCommand(),
@@ -69,10 +71,10 @@ public class CommandManager implements Listener {
                     PlayerData playerData = ClimaxCore.getPlayerData(player);
 
                     if (playerData.hasRank(possibleCommand.getRank())) {
-                        String result = possibleCommand.execute(player, args);
+                        TextComponent result = possibleCommand.execute(player, args);
 
                         if (result != null) {
-                            player.sendMessage(result);
+                            player.spigot().sendMessage(result);
                         }
                     } else {
                         player.sendMessage(F.denyPermissions(possibleCommand.getRank()));
