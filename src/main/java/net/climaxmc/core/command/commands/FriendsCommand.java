@@ -5,7 +5,8 @@ import net.climaxmc.core.command.Command;
 import net.climaxmc.core.mysql.*;
 import net.climaxmc.core.utilities.C;
 import net.climaxmc.core.utilities.F;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.*;
 import org.bukkit.entity.Player;
 
 import java.sql.ResultSet;
@@ -17,7 +18,7 @@ public class FriendsCommand extends Command {
     }
 
     @Override
-    public TextComponent execute(Player player, String[] args) {
+    public String execute(Player player, String[] args) {
         if (args.length > 1) {
             return usage;
         }
@@ -31,19 +32,25 @@ public class FriendsCommand extends Command {
             return F.message("Friends", "You have added " + targetData + " as a friend.");
         }
 
-        String friendsString = F.topLine() + "\n";
+        player.sendMessage(F.topLine());
         ResultSet friendIdsSet = ClimaxCore.getMySQL().executeQuery(DataQueries.GET_FRIENDS, ClimaxCore.getPlayerData(ClimaxCore.getPlayerData(player).getId()));
 
         try {
             while (friendIdsSet != null && friendIdsSet.next()) {
                 PlayerData friendData = ClimaxCore.getPlayerData(friendIdsSet.getInt("friendid"));
                 if (friendData.getServerID() == null) {
-                    friendsString += C.GRAY + C.BOLD + friendData.getName() + C.GRAY + " \u00bb Currently Offline\n";
+                    player.sendMessage(C.GRAY + C.BOLD + friendData.getName() + C.GRAY + " \u00bb Currently Offline\n");
                 } else {
                     ResultSet serversSet = ClimaxCore.getMySQL().executeQuery(DataQueries.GET_SERVER_FROM_ID, friendData.getServerID());
                     if (serversSet != null && serversSet.next()) {
                         String serverName = serversSet.getString("game") + "-" + serversSet.getInt("serverid");
-                        friendsString += C.GRAY + C.BOLD + friendData.getName() + C.GRAY + " \u00bb " + C.GOLD + C.BOLD + serverName + "\n";
+                        player.spigot().sendMessage(
+                                new ComponentBuilder(friendData.getName()).color(ChatColor.GRAY).bold(true)
+                                        .append(" \u00bb ").bold(false)
+                                        .append(serverName).color(ChatColor.GOLD)
+                                        .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "server " + serverName))
+                                        .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to join server " + serverName).color(ChatColor.GOLD).create()))
+                                        .create());
                     }
                 }
             }
@@ -51,7 +58,6 @@ public class FriendsCommand extends Command {
             return F.message("Friends", "There was an error during retrieval of your friends.");
         }
 
-        friendsString += F.bottomLine();
-        return friendsString;
+        return F.bottomLine();
     }
 }

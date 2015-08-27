@@ -1,20 +1,14 @@
 package net.climaxmc.core.utilities;
 
 import net.climaxmc.core.mysql.Rank;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.*;
 
 public class F {
-    private static BaseComponent[] prefix(String prefix) {
-        return new ComponentBuilder(prefix).color(ChatColor.GOLD).bold(true).append(C.WHITE + "\u00bb ").create();
+    private static String prefix(String prefix) {
+        return C.GOLD + C.BOLD + prefix + C.WHITE + "\u00bb ";
     }
 
-    public static TextComponent message(String prefix, String message) {
-        TextComponent component = new TextComponent(prefix(prefix));
-        component.setColor(ChatColor.GRAY);
-        component.setBold(true);
-        component.addExtra(message);
-        return component;
+    public static String message(String prefix, String message) {
+        return prefix(prefix) + C.GRAY + message;
     }
 
     public static String denyPermissions(Rank rank) {

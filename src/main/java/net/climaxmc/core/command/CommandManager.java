@@ -71,10 +71,10 @@ public class CommandManager implements Listener {
                     PlayerData playerData = ClimaxCore.getPlayerData(player);
 
                     if (playerData.hasRank(possibleCommand.getRank())) {
-                        TextComponent result = possibleCommand.execute(player, args);
+                        String result = possibleCommand.execute(player, args);
 
                         if (result != null) {
-                            player.spigot().sendMessage(result);
+                            player.sendMessage(result);
                         }
                     } else {
                         player.sendMessage(F.denyPermissions(possibleCommand.getRank()));
