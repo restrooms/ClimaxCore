@@ -29,11 +29,11 @@ public class FriendsCommand extends Command {
                 return F.message("Friends", "That player has never joined!");
             }
             ClimaxCore.getMySQL().executeUpdate(DataQueries.ADD_FRIEND, ClimaxCore.getPlayerData(player).getId(), targetData.getId());
-            return F.message("Friends", "You have added " + targetData + " as a friend.");
+            return F.message("Friends", "You have added " + targetData.getName() + " as a friend.");
         }
 
         player.sendMessage(F.topLine());
-        ResultSet friendIdsSet = ClimaxCore.getMySQL().executeQuery(DataQueries.GET_FRIENDS, ClimaxCore.getPlayerData(ClimaxCore.getPlayerData(player).getId()));
+        ResultSet friendIdsSet = ClimaxCore.getMySQL().executeQuery(DataQueries.GET_FRIENDS, ClimaxCore.getPlayerData(player).getId());
 
         try {
             while (friendIdsSet != null && friendIdsSet.next()) {
@@ -43,18 +43,26 @@ public class FriendsCommand extends Command {
                 } else {
                     ResultSet serversSet = ClimaxCore.getMySQL().executeQuery(DataQueries.GET_SERVER_FROM_ID, friendData.getServerID());
                     if (serversSet != null && serversSet.next()) {
-                        String serverName = serversSet.getString("game") + "-" + serversSet.getInt("serverid");
+                        String serverName;
+                        if (serversSet.getString("shortname").equals("HUB")) {
+                            serverName = "Hub";
+                        } else if (serversSet.getString("shortname").equals("KitPvp")) {
+                            serverName = "KitPvp";
+                        } else {
+                            serverName = serversSet.getString("shortname") + "-" + serversSet.getInt("serverid");
+                        }
                         player.spigot().sendMessage(
                                 new ComponentBuilder(friendData.getName()).color(ChatColor.GRAY).bold(true)
                                         .append(" \u00bb ").bold(false)
                                         .append(serverName).color(ChatColor.GOLD)
-                                        .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "server " + serverName))
+                                        .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/server " + serverName))
                                         .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to join server " + serverName).color(ChatColor.GOLD).create()))
                                         .create());
                     }
                 }
             }
         } catch (SQLException e) {
+            ClimaxCore.getPlugin().getLogger().severe("Could not execute MySQL query! " + e.getMessage());
             return F.message("Friends", "There was an error during retrieval of your friends.");
         }
 
