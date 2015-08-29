@@ -170,7 +170,7 @@ public class MySQL {
                 Rank rank = Rank.valueOf(data.getString("rank"));
                 int coins = data.getInt("coins");
                 long ontime = data.getLong("playtime");
-                Integer server = data.getInt("serverid");
+                Integer server = (Integer) data.getObject("serverid");
                 playerData = new PlayerData(this, id, uuid, name, ip, rank, coins, ontime, server, new ArrayList<>(), new HashMap<>());
 
                 ResultSet punishments = executeQuery(DataQueries.GET_PUNISHMENTS, id);
@@ -227,7 +227,7 @@ public class MySQL {
                 Rank rank = Rank.valueOf(data.getString("rank"));
                 int coins = data.getInt("coins");
                 long ontime = data.getLong("playtime");
-                Integer server = data.getInt("serverid");
+                Integer server = (Integer) data.getObject("serverid");
                 playerData = new PlayerData(this, id, uuid, name, ip, rank, coins, ontime, server, new ArrayList<>(), new HashMap<>());
 
                 ResultSet punishments = executeQuery(DataQueries.GET_PUNISHMENTS, id);
@@ -280,7 +280,7 @@ public class MySQL {
                 Rank rank = Rank.valueOf(data.getString("rank"));
                 int coins = data.getInt("coins");
                 long ontime = data.getLong("playtime");
-                Integer server = data.getInt("serverid");
+                Integer server = (Integer) data.getObject("serverid");
                 playerData = new PlayerData(this, id, uuid, name, ip, rank, coins, ontime, server, new ArrayList<>(), new HashMap<>());
 
                 while (punishments != null && punishments.next()) {
@@ -343,10 +343,15 @@ public class MySQL {
      *
      * @return ID of server
      */
-    public int getServerID() {
+    public Integer getServerID() {
         try (ResultSet serverIDResult = executeQuery(DataQueries.GET_SERVER_ID, plugin.getServer().getIp(), plugin.getServer().getPort())) {
             if (serverIDResult != null && serverIDResult.next()) {
-                return serverIDResult.getInt("globalid");
+                Integer id = serverIDResult.getInt("globalid");
+                if (serverIDResult.wasNull()) {
+                    System.out.println("ID is null");
+                    id = null;
+                }
+                return id;
             }
         } catch (SQLException e) {
             plugin.getLogger().severe("Could not get server ID! " + e.getMessage());
