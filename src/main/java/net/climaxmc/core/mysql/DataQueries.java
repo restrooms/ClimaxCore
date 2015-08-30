@@ -24,7 +24,10 @@ public class DataQueries {
     public static final String DELETE_SERVER = "DELETE FROM `servers` WHERE `ip` = ? AND `port` = ?;";
 
     public static final String ADD_FRIEND = "INSERT IGNORE INTO `friends` (`playerid`, `friendid`) VALUES (?, ?);";
+    public static final String DELETE_FRIEND = "DELETE FROM `friends` WHERE `playerid` = ? AND `friendid` = ?;";
     public static final String GET_FRIENDS = "SELECT `friendid` FROM `friends` WHERE `playerid` = ?;";
 
     public static final String CREATE_CHAT_LOG = "INSERT IGNORE INTO `chatlogs` (`message`, `playerid`, `servername`) VALUES (?, ?, ?);";
+
+    public static final String GET_RANDOM_PLAYER_ID = "SELECT `id` FROM `players` ORDER BY RAND() WHERE `serverid` IS NOT NULL AND `playerid` IS NOT ? LIMIT 1;";
 }

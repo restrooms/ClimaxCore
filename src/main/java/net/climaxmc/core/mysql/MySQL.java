@@ -65,7 +65,7 @@ public class MySQL {
      *
      * @param runnable Runnable to run async
      */
-    public void runAsync(Runnable runnable) {
+    private void runAsync(Runnable runnable) {
         if (plugin.isEnabled()) {
             plugin.getServer().getScheduler().runTaskAsynchronously(plugin, runnable);
         } else {

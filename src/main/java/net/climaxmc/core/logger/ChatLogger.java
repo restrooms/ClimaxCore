@@ -25,7 +25,7 @@ public class ChatLogger implements Listener, PluginMessageListener {
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        ClimaxCore.getMySQL().runAsync(() -> ClimaxCore.getMySQL().executeUpdate(DataQueries.CREATE_CHAT_LOG, event.getMessage(), ClimaxCore.getPlayerData(player).getId(), serverName));
+        ClimaxCore.getMySQL().executeUpdate(DataQueries.CREATE_CHAT_LOG, event.getMessage(), ClimaxCore.getPlayerData(player).getId(), serverName);
     }
 
     @Override
