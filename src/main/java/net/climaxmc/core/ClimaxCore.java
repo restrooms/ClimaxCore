@@ -2,6 +2,7 @@ package net.climaxmc.core;
 
 import lombok.Getter;
 import net.climaxmc.core.command.CommandManager;
+import net.climaxmc.core.logger.ChatLogger;
 import net.climaxmc.core.mysql.*;
 import net.climaxmc.core.utilities.UtilPlayer;
 import org.bukkit.Bukkit;
@@ -21,6 +22,8 @@ public class ClimaxCore {
     @Getter
     private static int serverID;
     @Getter
+    private static GameType gameType;
+    @Getter
     private static CommandManager commandManager;
 
     private ClimaxCore() {} // Everything is static!
@@ -31,12 +34,14 @@ public class ClimaxCore {
      * @see Plugin#onEnable()
      * @param pluginInstance Host plugin
      */
-    public static void onEnable(Plugin pluginInstance, GameType gameType) {
+    public static void onEnable(Plugin pluginInstance, GameType gameTypeInstance) {
         plugin = pluginInstance;
+        gameType = gameTypeInstance;
         mySQL = new MySQL(plugin, "localhost", 3306, "climax", "plugin", "rR6nCbqaFTPCZqHA");
         plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
         commandManager = new CommandManager();
         plugin.getServer().getPluginManager().registerEvents(new CoreListeners(plugin), plugin);
+        new ChatLogger(plugin);
         if (!gameType.equals(GameType.HUB)) {
             mySQL.createServer(gameType);
         }
