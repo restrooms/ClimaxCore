@@ -8,7 +8,6 @@ import net.climaxmc.core.command.commands.messaging.ReplyCommand;
 import net.climaxmc.core.command.commands.punishments.*;
 import net.climaxmc.core.mysql.PlayerData;
 import net.climaxmc.core.utilities.F;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -50,7 +49,8 @@ public class CommandManager implements Listener {
                 new UnBanCommand(),
                 new UnMuteCommand(),
                 new MessageCommand(),
-                new ReplyCommand()
+                new ReplyCommand(),
+                new PeiCommand()
         );
     }
 
