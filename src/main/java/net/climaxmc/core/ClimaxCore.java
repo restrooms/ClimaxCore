@@ -53,6 +53,10 @@ public class ClimaxCore {
             }
             UtilPlayer.getAll().forEach(player -> getPlayerData(player).setServerID(serverID));
         }, 2);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+            cachedPlayerData.clear();
+            UtilPlayer.getAll().forEach(ClimaxCore::getPlayerData);
+        }, 600, 600);
     }
 
     /**
