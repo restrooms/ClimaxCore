@@ -20,9 +20,9 @@ public enum Rank {
     TWITCH(C.DARK_PURPLE + C.BOLD + "Twi" + C.WHITE + C.BOLD + "tch", 30),
     YOUTUBE(C.RED + C.BOLD + "You" + C.WHITE + C.BOLD + "Tube", 30),
     TRUSTED(C.DARK_AQUA + C.BOLD + "Trusted", 20),
-    MASTER(C.RESET + "Master", 3),
-    TITAN(C.RESET + "Titan", 2),
-    NINJA(C.RESET + "Ninja", 1),
+    MASTER(C.DARK_RED + C.BOLD + "Master", 3),
+    TITAN(C.GOLD + C.BOLD + "Titan", 2),
+    NINJA(C.AQUA + C.BOLD + "Ninja", 1),
     DEFAULT("", 0);
 
     private String prefix;
